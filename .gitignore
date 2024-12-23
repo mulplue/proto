@@ -1,2 +1,7 @@
 */babel/*.json
 .idea
+*.pyc
+
+results/
+output/
+outputs/
