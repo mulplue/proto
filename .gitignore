@@ -1,2 +1,10 @@
 */babel/*.json
 .idea
+
+*.pyc
+*.egg-info
+build/
+
+data/
+results/
+wandb/

@@ -1,0 +1,47 @@
+# @package _global_
+
+defaults:
+  - amp
+  - /env/location
+
+experiment_name: location
+
+env:
+  config:
+    amp_obs:
+      disable_discriminator: False
+
+algo:
+  config:
+    task_reward_w: 0.5
+    discriminator_reward_w: 0.5
+
+    models:
+      location_model:
+        _target_: phys_anim.agents.models.common.Flatten
+        config:
+          normalize_obs: False
+          obs_clamp_value: ${algo.config.obs_clamp_value}
+        # Input and output size are the same due to flattening
+        num_in: ${env.config.location_params.obs_size}
+        num_out: ${.num_in}
+
+    # Append the direction obs to the actor and critic inputs
+    actor:
+      config:
+        mu_model:
+          config:
+            extra_inputs:
+              location: ${algo.config.models.location_model}
+
+    critic:
+      config:
+        extra_inputs:
+          location: ${algo.config.models.location_model}
+
+    extra_inputs:
+      location:
+        retrieve_from_env: True
+        dtype: float
+        size: ${algo.config.models.location_model.num_in}
+        env_obs_name: location_obs

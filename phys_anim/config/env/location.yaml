@@ -1,0 +1,18 @@
+# @package _global_
+
+defaults:
+  - humanoid
+
+# Env structure
+env:
+  _target_: phys_anim.envs.location.${backbone}.LocationHumanoid
+  config:
+    location_params:
+      tar_speed: 1.0
+      tar_change_steps_min: 100
+      tar_change_steps_max: 200
+      tar_dist_max: 10.0
+      enable_task_obs: True
+      obs_size: 2   # Jiahe: not sure
+
+# Globally accessible parameters
