@@ -61,6 +61,15 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
         self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
         return
 
+    def update_task(self, actions):
+        super().update_task(actions)
+
+        reset_task_mask = self.progress_buf >= self._tar_change_steps
+        rest_env_ids = reset_task_mask.nonzero(as_tuple=False).flatten()
+        if len(rest_env_ids) > 0:
+            self.reset_task(rest_env_ids)
+        return
+
     ###############################################################
     # Environment step logic
     ###############################################################

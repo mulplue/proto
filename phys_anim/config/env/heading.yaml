@@ -1,0 +1,19 @@
+# @package _global_
+
+defaults:
+  - humanoid
+
+# Env structure
+env:
+  _target_: phys_anim.envs.heading.${backbone}.HeadingHumanoid
+  config:
+    heading_params:
+        tar_speed_min: 1.5
+        tar_speed_max: 1.6
+        heading_change_steps_min: 100
+        heading_change_steps_max: 200
+        enable_rand_heading: True
+        enable_task_obs: True
+        obs_size: 5
+        
+# Globally accessible parameters
