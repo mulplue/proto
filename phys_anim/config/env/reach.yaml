@@ -1,0 +1,20 @@
+# @package _global_
+
+defaults:
+  - humanoid
+
+# Env structure
+env:
+  _target_: phys_anim.envs.reach.${backbone}.ReachHumanoid
+  config:
+    reach_params:
+      tar_speed: 1.0
+      tar_change_steps_min: 50
+      tar_change_steps_max: 100
+      tar_dist_max: 1.0
+      tar_height_min: 0.2
+      tar_height_max: 2.0
+      obs_size: 3
+      reach_body_name: "sword"
+
+# Globally accessible parameters

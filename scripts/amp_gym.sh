@@ -51,9 +51,9 @@ motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_
 
 """ASE task + ASE motion"""
 # sword and shield location
-CUDA_VISIBLE_DEVICES=2 python phys_anim/train_agent.py \
+CUDA_VISIBLE_DEVICES=7 python phys_anim/train_agent.py \
 +exp=location \
-experiment_name=amp_sas_location_gym_3584_fix1 \
+experiment_name=amp_sas_location_gym_3584 \
 +robot=sword_and_shield \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
 +backbone=isaacgym +opt=wandb num_envs=3584
@@ -65,6 +65,13 @@ experiment_name=amp_sas_heading_gym_3584 \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
 +backbone=isaacgym +opt=wandb num_envs=3584
 
+CUDA_VISIBLE_DEVICES=1 python phys_anim/train_agent.py \
++exp=reach \
+experiment_name=amp_sas_reach_gym_3584 \
++robot=sword_and_shield \
+motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
++backbone=isaacgym +opt=wandb num_envs=3584
+
 # # for test
 # CUDA_VISIBLE_DEVICES=2 python phys_anim/train_agent.py \
 # +exp=location \
@@ -72,3 +79,17 @@ motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_
 # +robot=sword_and_shield \
 # motion_file=data/motions/amp_sword_and_shield_humanoid_walk.npy \
 # +backbone=isaacgym +opt=wandb num_envs=3584
+
+CUDA_VISIBLE_DEVICES=0 python phys_anim/train_agent.py \
++exp=location_t1 \
+experiment_name=amp_sas_location_gym_3584_disc0.8 \
++robot=sword_and_shield \
+motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
++backbone=isaacgym +opt=wandb num_envs=3584
+
+CUDA_VISIBLE_DEVICES=2 python phys_anim/train_agent.py \
++exp=heading_t1 \
+experiment_name=amp_sas_heading_gym_3584_disc0.8 \
++robot=sword_and_shield \
+motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
++backbone=isaacgym +opt=wandb num_envs=3584
