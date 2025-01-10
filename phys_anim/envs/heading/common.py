@@ -37,18 +37,14 @@ class BaseHeading(HeadingHumanoid):  # type: ignore[misc]
         self._tar_facing_dir = torch.zeros([self.num_envs, 2], device=self.device, dtype=torch.float)
         self._tar_facing_dir[..., 0] = 1.0
 
-    def get_task_obs_size(self):
-        obs_size = 0
-        if (self._enable_task_obs):
-            obs_size = 5
-        return obs_size
-
     def pre_physics_step(self, actions):
         super().pre_physics_step(actions)
         self._prev_root_pos[:] = self.get_humanoid_root_states()[..., 0:3]
         return
 
     def reset_task(self, env_ids):
+        super().reset_task(env_ids)
+
         n = len(env_ids)
         if (self._enable_rand_heading):
             rand_theta = 2 * np.pi * torch.rand(n, device=self.device) - np.pi
@@ -68,7 +64,6 @@ class BaseHeading(HeadingHumanoid):  # type: ignore[misc]
         self._tar_dir[env_ids] = tar_dir
         self._tar_facing_dir[env_ids] = face_tar_dir
         self._heading_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
-        return
 
     def update_task(self, actions):
         super().update_task(actions)
@@ -93,7 +88,6 @@ class BaseHeading(HeadingHumanoid):  # type: ignore[misc]
         
         obs = compute_heading_observations(root_states, tar_dir, tar_speed, tar_face_dir, self.w_last)
         self.heading_obs[env_ids] = obs
-        return obs
 
     def compute_reward(self, actions):
         root_pos = self.get_humanoid_root_states()[..., 0:3]
@@ -101,8 +95,6 @@ class BaseHeading(HeadingHumanoid):  # type: ignore[misc]
         self.rew_buf[:] = compute_heading_reward(root_pos, self._prev_root_pos,  root_rot,
                                                  self._tar_dir, self._tar_speed,
                                                  self._tar_facing_dir, self.dt, self.w_last)
-        return
-    
 
 
 #####################################################################

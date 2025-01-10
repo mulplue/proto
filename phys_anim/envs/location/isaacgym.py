@@ -39,8 +39,6 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
             self.sim, asset_root, asset_file, asset_options
         )
 
-        return
-    
     def build_env(self, env_id, env_ptr, humanoid_asset):
         super().build_env(env_id, env_ptr, humanoid_asset)
 
@@ -57,8 +55,6 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
         self.gym.set_rigid_body_color(env_ptr, marker_handle, 0, gymapi.MESH_VISUAL, gymapi.Vec3(0.8, 0.0, 0.0))
         self._marker_handles.append(marker_handle)
 
-        return
-
     def _build_marker_state_tensors(self):
         num_actors = self._root_states.shape[0] // self.num_envs
         self._marker_states = self._root_states.view(self.num_envs, num_actors, self._root_states.shape[-1])[..., 1, :]
@@ -66,8 +62,6 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
         
         self._marker_actor_ids = self._humanoid_actor_ids + 1
 
-        return
-    
     ###############################################################
     # Helpers
     ###############################################################
@@ -77,7 +71,6 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
 
         self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self._root_states),
                                                      gymtorch.unwrap_tensor(self._marker_actor_ids), len(self._marker_actor_ids))
-        return
 
     def draw_task(self):
         self._update_marker()
@@ -95,5 +88,3 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
             curr_verts = verts[i]
             curr_verts = curr_verts.reshape([1, 6])
             self.gym.add_lines(self.viewer, env_ptr, curr_verts.shape[0], curr_verts, cols)
-
-        return

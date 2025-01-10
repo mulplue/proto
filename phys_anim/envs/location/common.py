@@ -31,14 +31,6 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
             dtype=torch.float,
         )   # Jiahe: not sure
 
-        return
-
-    def get_task_obs_size(self):
-        obs_size = 0
-        if (self._enable_task_obs):
-            obs_size = 2
-        return obs_size
-
     def pre_physics_step(self, actions):
         super().pre_physics_step(actions)
         self._prev_root_pos[:] = self.get_humanoid_root_states()[..., 0:3]
@@ -49,6 +41,8 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
     ###############################################################
 
     def reset_task(self, env_ids):
+        super().reset_task(env_ids)
+
         n = len(env_ids)
 
         char_root_pos = self.get_humanoid_root_states()[env_ids, 0:2]
@@ -68,12 +62,13 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
         rest_env_ids = reset_task_mask.nonzero(as_tuple=False).flatten()
         if len(rest_env_ids) > 0:
             self.reset_task(rest_env_ids)
-        return
 
     ###############################################################
     # Environment step logic
     ###############################################################
     def compute_task_obs(self, env_ids=None):
+        super().compute_task_obs(env_ids)
+
         if (env_ids is None):
             root_states = self.get_humanoid_root_states()
             tar_pos = self._tar_pos
@@ -83,7 +78,6 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
         
         obs = compute_location_observations(root_states, tar_pos, self.w_last)
         self.location_obs[env_ids] = obs
-        return
     
     def compute_reward(self, actions):
         root_pos = self.get_humanoid_root_states()[..., 0:3]
@@ -91,7 +85,6 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
         self.rew_buf[:] = compute_location_reward(root_pos, self._prev_root_pos, root_rot,
                                                  self._tar_pos, self._tar_speed,
                                                  self.dt, self.w_last)
-        return
 
     
 #####################################################################

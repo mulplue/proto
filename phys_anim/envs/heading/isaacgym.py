@@ -41,8 +41,6 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
 
         self._marker_asset = self.gym.load_asset(self.sim, asset_root, asset_file, asset_options)
 
-        return
-
     def build_env(self, env_id, env_ptr, humanoid_asset):
         super().build_env(env_id, env_ptr, humanoid_asset)
 
@@ -66,8 +64,6 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
         self.gym.set_rigid_body_color(env_ptr, face_marker_handle, 0, gymapi.MESH_VISUAL, gymapi.Vec3(0.0, 0.0, 0.8))
         self._face_marker_handles.append(face_marker_handle)
         
-        return
-    
     def _build_marker_state_tensors(self):
         num_actors = self._root_states.shape[0] // self.num_envs
 
@@ -81,8 +77,6 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
         self._face_marker_rot = self._face_marker_states[..., 3:7]
         self._face_marker_actor_ids = self._humanoid_actor_ids + TAR_FACING_ACTOR_ID
 
-        return
-    
     ###############################################################
     # Helpers
     ###############################################################
@@ -109,7 +103,6 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
         marker_ids = torch.cat([self._marker_actor_ids, self._face_marker_actor_ids], dim=0)
         self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self._root_states),
                                                      gymtorch.unwrap_tensor(marker_ids), len(marker_ids))
-        return
     
     def draw_task(self):
         self._update_marker()
@@ -136,5 +129,3 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
             curr_verts = verts[i:i+1]
             curr_verts = curr_verts.reshape([2, 6])
             self.gym.add_lines(self.viewer, env_ptr, curr_verts.shape[0], curr_verts, heading_cols)
-
-        return
