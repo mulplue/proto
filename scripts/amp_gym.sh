@@ -79,6 +79,13 @@ experiment_name=amp_sas_walk_gym \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy \
 +backbone=isaacgym +opt=wandb num_envs=3584
 
+CUDA_VISIBLE_DEVICES=2 python phys_anim/train_agent.py \
++exp=strike \
+experiment_name=amp_sas_strike_gym \
++robot=sword_and_shield \
+motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
++backbone=isaacgym +opt=wandb num_envs=3584
+
 # # for test
 # CUDA_VISIBLE_DEVICES=2 python phys_anim/train_agent.py \
 # +exp=location \

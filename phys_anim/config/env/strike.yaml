@@ -1,0 +1,14 @@
+# @package _global_
+
+defaults:
+  - humanoid
+
+# Env structure
+env:
+  _target_: phys_anim.envs.strike.${backbone}.StrikeHumanoid
+  config:
+    strike_params:
+      strike_body_names: ["sword", "right_hand", "right_lower_arm"]
+      obs_size: 15
+
+# Globally accessible parameters
