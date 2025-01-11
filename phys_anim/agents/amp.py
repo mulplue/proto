@@ -260,6 +260,7 @@ class AMP(PPO):
                 torch.maximum(1 - prob, torch.tensor(0.0001, device=self.device))
             )
             * self.config.discriminator_reward_w
+            * self.config.discriminator_reward_scale    # Jiahe: align with ase
         )
         return disc_r
 
@@ -498,6 +499,9 @@ class AMP(PPO):
             )
             training_log_dict["rewards/discriminator_rewards"] = (
                 self.experience_buffer.discriminator_rewards.mean()
+            )
+            training_log_dict["rewards/discriminator_rewards_unweighted"] = (
+                self.experience_buffer.discriminator_rewards.mean() / self.config.discriminator_reward_w
             )
 
         training_log_dict["actor/logstd_min"] = self.actor.logstd.min().detach()

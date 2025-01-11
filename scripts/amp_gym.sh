@@ -53,23 +53,30 @@ motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_
 # sword and shield location
 CUDA_VISIBLE_DEVICES=7 python phys_anim/train_agent.py \
 +exp=location \
-experiment_name=amp_sas_location_gym_3584 \
+experiment_name=amp_sas_location_gym \
 +robot=sword_and_shield \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
 +backbone=isaacgym +opt=wandb num_envs=3584
 
-CUDA_VISIBLE_DEVICES=3 python phys_anim/train_agent.py \
+CUDA_VISIBLE_DEVICES=6 python phys_anim/train_agent.py \
 +exp=heading \
-experiment_name=amp_sas_heading_gym_3584 \
+experiment_name=amp_sas_heading_gym \
 +robot=sword_and_shield \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
 +backbone=isaacgym +opt=wandb num_envs=3584
 
-CUDA_VISIBLE_DEVICES=1 python phys_anim/train_agent.py \
+CUDA_VISIBLE_DEVICES=5 python phys_anim/train_agent.py \
 +exp=reach \
-experiment_name=amp_sas_reach_gym_3584 \
+experiment_name=amp_sas_reach_gym \
 +robot=sword_and_shield \
 motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml \
++backbone=isaacgym +opt=wandb num_envs=3584
+
+CUDA_VISIBLE_DEVICES=4 python phys_anim/train_agent.py \
++exp=amp \
+experiment_name=amp_sas_walk_gym \
++robot=sword_and_shield \
+motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy \
 +backbone=isaacgym +opt=wandb num_envs=3584
 
 # # for test
@@ -79,6 +86,8 @@ motion_file=data/motions/ase_motions/reallusion_sword_shield/dataset_reallusion_
 # +robot=sword_and_shield \
 # motion_file=data/motions/amp_sword_and_shield_humanoid_walk.npy \
 # +backbone=isaacgym +opt=wandb num_envs=3584
+
+"""Change discriminator reward weight"""
 
 CUDA_VISIBLE_DEVICES=0 python phys_anim/train_agent.py \
 +exp=location_t1 \

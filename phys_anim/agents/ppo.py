@@ -853,6 +853,7 @@ class PPO:
             "times/training_minutes": (end_time - self.fit_start_time) / 60,
             "times/last_epoch_seconds": (end_time - self.epoch_start_time),
             "rewards/task_rewards": self.experience_buffer.rewards.mean().item(),
+            "rewards/task_rewards_unweighted": self.experience_buffer.rewards.mean().item() / self.config.task_reward_w if self.config.task_reward_w > 0 else 0,
             "rewards/extra_rewards": self.experience_buffer.extra_rewards.mean().item(),
             "rewards/total_rewards": self.experience_buffer.total_rewards.mean().item(),
         }

@@ -15,7 +15,7 @@ fabric:
       resume: ${wandb.wandb_resume}
 
 wandb:
-  wandb_project: proto_motions
+  wandb_project: proto
   wandb_tags: null
   wandb_group: null
   wandb_id: null
