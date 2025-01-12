@@ -136,10 +136,10 @@ def compute_location_reward(root_pos, prev_root_pos, root_rot, tar_pos, tar_spee
     vel_reward[speed_mask] = 0
 
 
-    heading_rot = torch_utils.calc_heading_quat(root_rot, w_last)
+    heading_rot = torch_utils.calc_heading_quat(root_rot)
     facing_dir = torch.zeros_like(root_pos)
     facing_dir[..., 0] = 1.0
-    facing_dir = rotations.quat_rotate(heading_rot, facing_dir, w_last)
+    facing_dir = quat_rotate(heading_rot, facing_dir)
     facing_err = torch.sum(tar_dir * facing_dir[..., 0:2], dim=-1)
     facing_reward = torch.clamp_min(facing_err, 0.0)
 

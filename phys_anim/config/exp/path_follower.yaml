@@ -17,6 +17,7 @@ algo:
   config:
     task_reward_w: 0.5
     discriminator_reward_w: 0.5
+    discriminator_reward_scale: 2
 
     models:
       path_model:
