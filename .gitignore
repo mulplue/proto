@@ -4,6 +4,7 @@
 *.pyc
 *.egg-info
 build/
+.vscode/
 
 data/
 results/

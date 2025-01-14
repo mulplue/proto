@@ -20,8 +20,8 @@
             // ]
             // proto test reach
             "args": [
-                "+exp=reach",
-                "experiment_name=amp_sas_reach_gym_debug_3",
+                "+exp=location",
+                "experiment_name=amp_sas_location_gym_debug_1",
                 "+robot=sword_and_shield",
                 "motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy",
                 "+backbone=isaacgym",

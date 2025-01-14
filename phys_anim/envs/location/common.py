@@ -105,7 +105,7 @@ def compute_location_observations(root_states, tar_pos, w_last):
     obs = local_tar_pos
     return obs
 
-@torch.jit.script
+# @torch.jit.script
 def compute_location_reward(root_pos, prev_root_pos, root_rot, tar_pos, tar_speed, dt, w_last):
     # type: (Tensor, Tensor, Tensor, Tensor, float, float, bool) -> Tensor
     dist_threshold = 0.5

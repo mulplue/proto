@@ -47,6 +47,10 @@ class BaseReach(ReachHumanoid):  # type: ignore[misc]
             change_steps = torch.randint(low=self._tar_change_steps_min, high=self._tar_change_steps_max,
                                         size=(n,), device=self.device, dtype=torch.int64)
 
+            # Jiahe: add offset
+            root_pos = self.get_humanoid_root_states()[..., 0:3]
+            rand_pos[..., 0:2] += root_pos[env_ids, 0:2]
+            
             self._tar_pos[env_ids, :] = rand_pos
             self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
         
@@ -91,7 +95,7 @@ def compute_location_observations(root_states, tar_pos, w_last):
     obs = local_tar_pos
     return obs
 
-# @torch.jit.script
+@torch.jit.script
 def compute_reach_reward(reach_body_pos, root_rot, tar_pos, tar_speed, dt):
     # type: (Tensor, Tensor, Tensor, float, float) -> Tensor
     pos_err_scale = 4.0
