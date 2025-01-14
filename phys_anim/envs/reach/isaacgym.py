@@ -25,7 +25,7 @@ class ReachHumanoid(BaseReach, TaskHumanoid):  # type: ignore[misc]
         super().create_envs(num_envs, spacing, num_per_row)
 
     def _load_marker_asset(self):
-        asset_root = "ase/data/assets/mjcf/"
+        asset_root = "ase/data/assets/urdf/"
         asset_file = "location_marker.urdf"
 
         asset_options = gymapi.AssetOptions()

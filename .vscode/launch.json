@@ -1,0 +1,34 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "name": "Python Debugger: Current File",
+            "type": "debugpy",
+            "request": "launch",
+            "program": "${file}",
+            "console": "integratedTerminal",
+            "cwd": "/home/chenjiahe/3_hsi/proto",
+            // // ase test reach
+            // "args": [
+            //     "--task", "HumanoidReach",
+            //     "--cfg_env", "ase/data/cfg/humanoid_sword_shield_reach.yaml",
+            //     "--cfg_train", "ase/data/cfg/train/rlg/amp_humanoid_task.yaml",
+            //     "--motion_file", "ase/data/motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml"
+            // ]
+            // proto test reach
+            "args": [
+                "+exp=reach",
+                "experiment_name=amp_sas_reach_gym_debug_3",
+                "+robot=sword_and_shield",
+                "motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy",
+                "+backbone=isaacgym",
+                "num_envs=1024"
+            ]
+            //     "+opt=wandb",
+            // ]
+        }
+    ]
+}

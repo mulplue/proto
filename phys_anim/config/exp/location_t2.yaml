@@ -2,9 +2,9 @@
 
 defaults:
   - amp
-  - /env/heading
+  - /env/location
 
-experiment_name: heading
+experiment_name: location
 
 env:
   config:
@@ -13,17 +13,18 @@ env:
 
 algo:
   config:
-    task_reward_w: 0.2
-    discriminator_reward_w: 0.8
+    task_reward_w: 0.9
+    discriminator_reward_w: 0.1
+    discriminator_reward_scale: 2.0
 
     models:
-      heading_model:
+      location_model:
         _target_: phys_anim.agents.models.common.Flatten
         config:
           normalize_obs: False
           obs_clamp_value: ${algo.config.obs_clamp_value}
         # Input and output size are the same due to flattening
-        num_in: ${env.config.heading_params.obs_size}
+        num_in: ${env.config.location_params.obs_size}
         num_out: ${.num_in}
 
     # Append the direction obs to the actor and critic inputs
@@ -32,16 +33,16 @@ algo:
         mu_model:
           config:
             extra_inputs:
-              heading: ${algo.config.models.heading_model}
+              location: ${algo.config.models.location_model}
 
     critic:
       config:
         extra_inputs:
-          heading: ${algo.config.models.heading_model}
+          location: ${algo.config.models.location_model}
 
     extra_inputs:
-      heading:
+      location:
         retrieve_from_env: True
         dtype: float
-        size: ${algo.config.models.heading_model.num_in}
-        env_obs_name: heading_obs
+        size: ${algo.config.models.location_model.num_in}
+        env_obs_name: location_obs

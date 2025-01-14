@@ -44,16 +44,15 @@ class BaseLocation(LocationHumanoid):  # type: ignore[misc]
         super().reset_task(env_ids)
 
         n = len(env_ids)
+        if n > 0:
+            char_root_pos = self.get_humanoid_root_states()[env_ids, 0:2]
+            rand_pos = self._tar_dist_max * (2.0 * torch.rand([n, 2], device=self.device) - 1.0)
 
-        char_root_pos = self.get_humanoid_root_states()[env_ids, 0:2]
-        rand_pos = self._tar_dist_max * (2.0 * torch.rand([n, 2], device=self.device) - 1.0)
+            change_steps = torch.randint(low=self._tar_change_steps_min, high=self._tar_change_steps_max,
+                                        size=(n,), device=self.device, dtype=torch.int64)
 
-        change_steps = torch.randint(low=self._tar_change_steps_min, high=self._tar_change_steps_max,
-                                     size=(n,), device=self.device, dtype=torch.int64)
-
-        self._tar_pos[env_ids] = char_root_pos + rand_pos
-        self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
-        return
+            self._tar_pos[env_ids] = char_root_pos + rand_pos
+            self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
 
     def update_task(self, actions):
         super().update_task(actions)
@@ -136,10 +135,10 @@ def compute_location_reward(root_pos, prev_root_pos, root_rot, tar_pos, tar_spee
     vel_reward[speed_mask] = 0
 
 
-    heading_rot = torch_utils.calc_heading_quat(root_rot)
+    heading_rot = torch_utils.calc_heading_quat(root_rot, w_last)
     facing_dir = torch.zeros_like(root_pos)
     facing_dir[..., 0] = 1.0
-    facing_dir = quat_rotate(heading_rot, facing_dir)
+    facing_dir = rotations.quat_rotate(heading_rot, facing_dir, w_last)
     facing_err = torch.sum(tar_dir * facing_dir[..., 0:2], dim=-1)
     facing_reward = torch.clamp_min(facing_err, 0.0)
 

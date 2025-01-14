@@ -46,24 +46,25 @@ class BaseHeading(HeadingHumanoid):  # type: ignore[misc]
         super().reset_task(env_ids)
 
         n = len(env_ids)
-        if (self._enable_rand_heading):
-            rand_theta = 2 * np.pi * torch.rand(n, device=self.device) - np.pi
-            rand_face_theta = 2 * np.pi * torch.rand(n, device=self.device) - np.pi
-        else:
-            rand_theta = torch.zeros(n, device=self.device)
-            rand_face_theta = torch.zeros(n, device=self.device)
+        if n > 0:
+            if (self._enable_rand_heading):
+                rand_theta = 2 * np.pi * torch.rand(n, device=self.device) - np.pi
+                rand_face_theta = 2 * np.pi * torch.rand(n, device=self.device) - np.pi
+            else:
+                rand_theta = torch.zeros(n, device=self.device)
+                rand_face_theta = torch.zeros(n, device=self.device)
 
-        tar_dir = torch.stack([torch.cos(rand_theta), torch.sin(rand_theta)], dim=-1)
-        tar_speed = (self._tar_speed_max - self._tar_speed_min) * torch.rand(n, device=self.device) + self._tar_speed_min
-        change_steps = torch.randint(low=self._heading_change_steps_min, high=self._heading_change_steps_max,
-                                     size=(n,), device=self.device, dtype=torch.int64)
-        
-        face_tar_dir = torch.stack([torch.cos(rand_face_theta), torch.sin(rand_face_theta)], dim=-1)
+            tar_dir = torch.stack([torch.cos(rand_theta), torch.sin(rand_theta)], dim=-1)
+            tar_speed = (self._tar_speed_max - self._tar_speed_min) * torch.rand(n, device=self.device) + self._tar_speed_min
+            change_steps = torch.randint(low=self._heading_change_steps_min, high=self._heading_change_steps_max,
+                                        size=(n,), device=self.device, dtype=torch.int64)
+            
+            face_tar_dir = torch.stack([torch.cos(rand_face_theta), torch.sin(rand_face_theta)], dim=-1)
 
-        self._tar_speed[env_ids] = tar_speed
-        self._tar_dir[env_ids] = tar_dir
-        self._tar_facing_dir[env_ids] = face_tar_dir
-        self._heading_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
+            self._tar_speed[env_ids] = tar_speed
+            self._tar_dir[env_ids] = tar_dir
+            self._tar_facing_dir[env_ids] = face_tar_dir
+            self._heading_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
 
     def update_task(self, actions):
         super().update_task(actions)

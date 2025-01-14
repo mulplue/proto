@@ -22,7 +22,7 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
     def create_envs(self, num_envs, spacing, num_per_row):
         if not self.headless:
             self._marker_handles = []
-            self._marker_handles = [[] for _ in range(num_envs)]
+            self._face_marker_handles = []
             self._load_marker_asset()
 
         super().create_envs(num_envs, spacing, num_per_row)
@@ -65,23 +65,23 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
         self._face_marker_handles.append(face_marker_handle)
         
     def _build_marker_state_tensors(self):
-        num_actors = self._root_states.shape[0] // self.num_envs
+        num_actors = self.root_states.shape[0] // self.num_envs
 
-        self._marker_states = self._root_states.view(self.num_envs, num_actors, self._root_states.shape[-1])[..., TAR_ACTOR_ID, :]
+        self._marker_states = self.root_states.view(self.num_envs, num_actors, self.root_states.shape[-1])[..., TAR_ACTOR_ID, :]
         self._marker_pos = self._marker_states[..., :3]
         self._marker_rot = self._marker_states[..., 3:7]
-        self._marker_actor_ids = self._humanoid_actor_ids + TAR_ACTOR_ID
+        self._marker_actor_ids = self.humanoid_actor_ids + TAR_ACTOR_ID
 
-        self._face_marker_states = self._root_states.view(self.num_envs, num_actors, self._root_states.shape[-1])[..., TAR_FACING_ACTOR_ID, :]
+        self._face_marker_states = self.root_states.view(self.num_envs, num_actors, self.root_states.shape[-1])[..., TAR_FACING_ACTOR_ID, :]
         self._face_marker_pos = self._face_marker_states[..., :3]
         self._face_marker_rot = self._face_marker_states[..., 3:7]
-        self._face_marker_actor_ids = self._humanoid_actor_ids + TAR_FACING_ACTOR_ID
+        self._face_marker_actor_ids = self.humanoid_actor_ids + TAR_FACING_ACTOR_ID
 
     ###############################################################
     # Helpers
     ###############################################################
     def _update_marker(self):
-        humanoid_root_pos = self._humanoid_root_states[..., 0:3]
+        humanoid_root_pos = self.get_humanoid_root_states()[..., 0:3]
         self._marker_pos[..., 0:2] = humanoid_root_pos[..., 0:2] + self._tar_dir
         self._marker_pos[..., 2] = 0.0
 
@@ -101,7 +101,7 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
         self._face_marker_rot[:] = face_q
 
         marker_ids = torch.cat([self._marker_actor_ids, self._face_marker_actor_ids], dim=0)
-        self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self._root_states),
+        self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self.root_states),
                                                      gymtorch.unwrap_tensor(marker_ids), len(marker_ids))
     
     def draw_task(self):
@@ -113,7 +113,7 @@ class HeadingHumanoid(BaseHeading, TaskHumanoid):  # type: ignore[misc]
 
         self.gym.clear_lines(self.viewer)
 
-        root_pos = self._humanoid_root_states[..., 0:3]
+        root_pos = self.get_humanoid_root_states()[..., 0:3]
         prev_root_pos = self._prev_root_pos
         sim_vel = (root_pos - prev_root_pos) / self.dt
         sim_vel[..., -1] = 0

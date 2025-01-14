@@ -13,8 +13,9 @@ env:
 
 algo:
   config:
-    task_reward_w: 0.2
-    discriminator_reward_w: 0.8
+    task_reward_w: 0.7
+    discriminator_reward_w: 0.3
+    discriminator_reward_scale: 2.0
 
     models:
       location_model:

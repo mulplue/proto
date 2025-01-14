@@ -24,7 +24,7 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
         super().create_envs(num_envs, spacing, num_per_row)
 
     def _load_marker_asset(self):
-        asset_root = "phys_anim/data/assets/mjcf/"
+        asset_root = "phys_anim/data/assets/urdf/"
         asset_file = "location_marker.urdf"
 
         asset_options = gymapi.AssetOptions()
@@ -56,11 +56,11 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
         self._marker_handles.append(marker_handle)
 
     def _build_marker_state_tensors(self):
-        num_actors = self._root_states.shape[0] // self.num_envs
-        self._marker_states = self._root_states.view(self.num_envs, num_actors, self._root_states.shape[-1])[..., 1, :]
+        num_actors = self.root_states.shape[0] // self.num_envs
+        self._marker_states = self.root_states.view(self.num_envs, num_actors, self.root_states.shape[-1])[..., 1, :]
         self._marker_pos = self._marker_states[..., :3]
         
-        self._marker_actor_ids = self._humanoid_actor_ids + 1
+        self._marker_actor_ids = self.humanoid_actor_ids + 1
 
     ###############################################################
     # Helpers
@@ -69,7 +69,7 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
         self._marker_pos[..., 0:2] = self._tar_pos
         self._marker_pos[..., 2] = 0.0
 
-        self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self._root_states),
+        self.gym.set_actor_root_state_tensor_indexed(self.sim, gymtorch.unwrap_tensor(self.root_states),
                                                      gymtorch.unwrap_tensor(self._marker_actor_ids), len(self._marker_actor_ids))
 
     def draw_task(self):
@@ -79,7 +79,7 @@ class LocationHumanoid(BaseLocation, TaskHumanoid):  # type: ignore[misc]
 
         self.gym.clear_lines(self.viewer)
 
-        starts = self._humanoid_root_states[..., 0:3]
+        starts = self.get_humanoid_root_states()[..., 0:3]
         ends = self._marker_pos
 
         verts = torch.cat([starts, ends], dim=-1).cpu().numpy()

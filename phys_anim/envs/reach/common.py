@@ -39,16 +39,16 @@ class BaseReach(ReachHumanoid):  # type: ignore[misc]
         super().reset_task(env_ids)
 
         n = len(env_ids)
+        if n > 0:
+            rand_pos = torch.rand([n, 3], device=self.device)
+            rand_pos[..., 0:2] = self._tar_dist_max * (2.0 * rand_pos[..., 0:2] - 1.0)
+            rand_pos[..., 2] = (self._tar_height_max - self._tar_height_min) * rand_pos[..., 2] + self._tar_height_min
+            
+            change_steps = torch.randint(low=self._tar_change_steps_min, high=self._tar_change_steps_max,
+                                        size=(n,), device=self.device, dtype=torch.int64)
 
-        rand_pos = torch.rand([n, 3], device=self.device)
-        rand_pos[..., 0:2] = self._tar_dist_max * (2.0 * rand_pos[..., 0:2] - 1.0)
-        rand_pos[..., 2] = (self._tar_height_max - self._tar_height_min) * rand_pos[..., 2] + self._tar_height_min
-        
-        change_steps = torch.randint(low=self._tar_change_steps_min, high=self._tar_change_steps_max,
-                                     size=(n,), device=self.device, dtype=torch.int64)
-
-        self._tar_pos[env_ids, :] = rand_pos
-        self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
+            self._tar_pos[env_ids, :] = rand_pos
+            self._tar_change_steps[env_ids] = self.progress_buf[env_ids] + change_steps
         
     
     def update_task(self, actions):
@@ -91,7 +91,7 @@ def compute_location_observations(root_states, tar_pos, w_last):
     obs = local_tar_pos
     return obs
 
-@torch.jit.script
+# @torch.jit.script
 def compute_reach_reward(reach_body_pos, root_rot, tar_pos, tar_speed, dt):
     # type: (Tensor, Tensor, Tensor, float, float) -> Tensor
     pos_err_scale = 4.0
