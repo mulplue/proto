@@ -1,0 +1,54 @@
+# @package _global_
+
+defaults:
+  - amp
+  - /env/unihsi
+
+experiment_name: unihsi
+
+env:
+  config:
+    amp_obs:
+      disable_discriminator: False
+
+algo:
+  config:
+    task_reward_w: 0.5
+    discriminator_reward_w: 0.5
+    discriminator_reward_scale: 2
+
+    models:
+      unihsi_model:
+        _target_: phys_anim.agents.models.common.Flatten
+        config:
+          normalize_obs: False
+          obs_clamp_value: ${algo.config.obs_clamp_value}
+        # Input and output size are the same due to flattening
+        num_in: ${env.config.unihsi_params.obs_size}
+        num_out: ${.num_in}
+
+    # Append the direction obs to the actor and critic inputs
+    actor:
+      config:
+        mu_model:
+          config:
+            units: [1024, 1024, 512]
+            extra_inputs:
+              unihsi: ${algo.config.models.unihsi_model}
+
+    critic:
+      config:
+        units: [1024, 1024, 512]
+        extra_inputs:
+          unihsi: ${algo.config.models.unihsi_model}
+
+    extra_inputs:
+      unihsi:
+        retrieve_from_env: True
+        dtype: float
+        size: ${algo.config.models.unihsi_model.num_in}
+        env_obs_name: unihsi_obs
+
+    discriminator:
+      config:
+        units: [1024, 1024, 512]

@@ -18,17 +18,38 @@
             //     "--cfg_train", "ase/data/cfg/train/rlg/amp_humanoid_task.yaml",
             //     "--motion_file", "ase/data/motions/reallusion_sword_shield/dataset_reallusion_sword_shield.yaml"
             // ]
-            // proto test reach
+            // // proto test reach
+            // "args": [
+            //     "+exp=location",
+            //     "experiment_name=amp_sas_location_gym_debug_1",
+            //     "+robot=sword_and_shield",
+            //     "motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy",
+            //     "+backbone=isaacgym",
+            //     "num_envs=1024"
+            // ]
+            // // proto test unihsi
+            // "args": [
+            //     "+exp=unihsi",
+            //     "experiment_name=amp_sas_unihsi_gym_debug_1",
+            //     "env.config.unihsi_params.obj_file=data/unihsi_data/sceneplan/partnet_train_simple_test.json",
+            //     "+robot=amp",
+            //     "motion_file=data/unihsi_data/motion_clips/training_test.yaml",
+            //     "+backbone=isaacgym",
+            //     "num_envs=1024"
+            // ]
+            // proto test scene
             "args": [
-                "+exp=location",
-                "experiment_name=amp_sas_location_gym_debug_1",
-                "+robot=sword_and_shield",
-                "motion_file=data/motions/ase_motions/reallusion_sword_shield/RL_Avatar_Atk_2xCombo01_Motion.npy",
+                "+exp=amp",
+                "experiment_name=amp_gym_test_scene",
+                // "env.config.unihsi_params.obj_file=data/unihsi_data/sceneplan/partnet_train_simple_test.json",
+                "+robot=amp",
+                "motion_file=data/motions/amp_humanoid_walk.npy",
+                "+scenes=samp",
                 "+backbone=isaacgym",
                 "num_envs=1024"
             ]
-            //     "+opt=wandb",
-            // ]
+
+
         }
     ]
 }

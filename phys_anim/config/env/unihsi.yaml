@@ -1,0 +1,16 @@
+# @package _global_
+
+defaults:
+  - humanoid
+
+# Env structure
+env:
+  _target_: phys_anim.envs.unihsi.${backbone}.UnihsiHumanoid
+  config:
+    unihsi_params:
+      obs_size: 216
+      num_scenes: 64      # Jiahe: not sure
+      env_spacing: 1.0    # Jiahe: not sure
+      obj_file: "data/unihsi_data/sceneplan/partnet_train_simple.json"
+      strike_body_names: ["pelvis", "left_thigh", "left_shin", "left_foot", "right_thigh", "right_shin", "right_foot", "torso", "head", "left_upper_arm", "left_lower_arm", "left_hand", "right_upper_arm", "right_lower_arm", "right_hand"]
+      
